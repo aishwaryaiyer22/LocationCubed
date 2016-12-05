@@ -1,0 +1,4 @@
+# ignore any tar, zip files in local system
+*.[tar]
+*.[tar.gz]
+*.[zip]
