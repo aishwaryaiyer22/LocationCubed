@@ -55,29 +55,41 @@
         </div>
     </header>
     <div class = "container" style = "margin-top:5em">
-        <div class="bs-docs-section">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="page-header">
-              <h2 id="forms" style = "margin-top:5px">Please enter the address and your preferences below</h2>
-            </div>
-          </div>
-        </div>
-
+      <div class="bs-docs-section">
         <div class="row">
           <div class="col-lg-6">
-            <div class="well bs-component">
+            <div class="bs-component">
               <form class="form-horizontal">
                 <fieldset>
+                  <h2 style = "margin-top:1px">Location</h2>
+                  <hr>
                   <div class="form-group">
-                    <label for="address" class="col-lg-2 control-label">Address</label>
-                    <div class="col-lg-10">
-                      <input type="text" class="form-control" id="inputAddress" placeholder="Tell us where you're looking to stay">
-                    </div>
+                    <label for="address" class="control-label">Address</label>
+                    <div >
+                      <input type="text" class="form-control" id="inputAddress" placeholder=" eg. 420 Riverside Drive, New York, NY">
+                    </div> 
                   </div>
+                  <h2 style = "margin-top:1px">About You</h2>
+                  <hr>
+
                   <div class="form-group">
-                    <label for="address" class="col-lg-2 control-label">Work Address</label>
-                    <div class="col-lg-10">
+                    <label for="hood_type" class="control-label">What kind of neigbourhood would you prefer?</label>
+                    <div class = "row">
+                      <div class="col-lg-2">
+                      Quiet
+                      </div>
+                      <div class="col-lg-4">
+                        <input type="range" class="form-control" id="hood_type" min="0" max="100">
+                      </div>
+                      <div class="col-lg-2">
+                        Lively
+                      </div>
+                    </div>  
+                  </div>
+
+                  <div class="form-group">
+                    <label for="address" class="control-label">Work Address</label>
+                    <div >
                       <input type="text" class="form-control" id="inputAddress" placeholder="(Optional) Enter your work/desired destination address">
                     </div>
                   </div>
@@ -89,55 +101,43 @@
                     </div>
                   </div> -->
                   <div class="form-group">
-                    <label class="col-lg-2 control-label">Preference 1</label>
-                    <div class="col-lg-10">
+                    <label class="control-label">Preferred mode of transport</label>
+                    <div class="">
                       <div class="radio">
                         <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                          Option one is this
+                          <input type="radio" name="option1" id="car" value="option1" checked="">
+                          Car
                         </label>
                       </div>
                       <div class="radio">
                         <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                          Option two can be something else
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-lg-2 control-label">Preference 2</label>
-                    <div class="col-lg-10">
-                      <div class="radio">
-                        <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                          Option one is this
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label>
-                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                          Option two can be something else
+                          <input type="radio" name="option2" id="pt" value="option2">
+                          Public Transport
                         </label>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="select" class="col-lg-2 control-label">Selects</label>
-                    <div class="col-lg-10">
-                      <select class="form-control" id="select">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </select>
+                    <label class="control-label">Will you be travelling with children?</label>
+                    <div class="">
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="y" value="option1" checked="">
+                          Yes
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="n" value="option2">
+                          No
+                        </label>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
                       <button type="reset" class="btn btn-default">Cancel</button>
-                      <button type="submit" class="btn btn-primary">Submit</button>
+                      <button type="submit" class="btn btn-primary">Score</button>
                     </div>
                   </div>
                 </fieldset>
