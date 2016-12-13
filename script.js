@@ -18,57 +18,62 @@ var dirService = new google.maps.DirectionsService();
 var dirDisplay = new google.maps.DirectionsRenderer();
 dirDisplay.setMap(map);
 
+var slider;
+var travelMode;
+var home;
+var work;
+
+var homeLoc;
+var homeMark;
+
+function getDirections() {
+  if(homeMark) {
+    homeMark.setMap(null);
+  }
+  if(work != "") {
+    var dirRequest = {
+      origin: homeLoc,
+      destination: work,
+      travelMode: travelMode
+    }
+    dirService.route(dirRequest, function(response, status) {
+      if(status == 'OK') {
+        dirDisplay.setDirections(response);
+        alert(response.routes[0].legs[0].duration.text);
+      }
+    });
+  } else {
+    dirDisplay.setDirections({routes: []});
+    homeMark = new google.maps.Marker({
+      position: homeLoc,
+      map: map
+    });
+  }
+}
+
+function locationHandler(response, status) {
+  homeLoc = response[0].geometry.location;
+  map.setCenter(homeLoc);
+  map.setZoom(12);
+  var placeRequest = {
+    keyword: "nightlife",
+    location: homeLoc,
+    radius: 1000
+  }
+  placeService.radarSearch(placeRequest, function(response, status) {
+    alert(response.length);
+  });
+  getDirections();
+}
+
 $("#user-info-form").submit(function(event) {
   event.preventDefault();
-  var slider = $('#hood_type').val();
-  var travelMode = $('input[name=mode]:checked').val();;
-  var home = $("#homeAddress").val();
-  var work = $("#workAddress").val();
-  
-  var homeLoc;
-  var homeMark;
-
-  var getDirections = function() {
-    if(homeMark) {
-      homeMark.setMap(null);
-    }
-    if(work != "") {
-      var dirRequest = {
-        origin: homeLoc,
-        destination: work,
-        travelMode: travelMode
-      }
-      dirService.route(dirRequest, function(response, status) {
-        if(status == 'OK') {
-          dirDisplay.setDirections(response);
-          alert(response.routes[0].legs[0].duration.text);
-        }
-      });
-    } else {
-      homeMark = new google.maps.Marker({
-        position: homeLoc,
-        map: map
-      });
-      map.setCenter(homeLoc);
-      map.setZoom(12);
-    }
-  }
-
-  var locationHandler = function(response, status) {
-    homeLoc = response[0].geometry.location;
-    var placeRequest = {
-      keyword: "nightlife",
-      location: homeLoc,
-      radius: 1000
-    }
-    placeService.radarSearch(placeRequest, function(response, status) {
-      alert(response.length);
-    });
-    getDirections();
-  }
+  slider = $('#hood_type').val();
+  travelMode = $('input[name=mode]:checked').val();;
+  home = $("#homeAddress").val();
+  work = $("#workAddress").val();
 
   geocoder.geocode({address: home}, locationHandler);
-
 });
 
 var timeToWork = {
