@@ -28,6 +28,10 @@ var homeMark;
 
 var components = [];
 
+function calcDistance(p1, p2) {
+  return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2)).toFixed(2);
+}
+
 function scoreTime(seconds) {
   return 1 - 1/(1 + Math.exp((60 * 60) - seconds)); //60*60 is 50% mark
 }
@@ -96,18 +100,30 @@ function locationHandler(response, status) {
   homeLoc = response[0].geometry.location;
   map.setCenter(homeLoc);
   map.setZoom(12);
-  var placeRequest = {
+  var nightlifeRequest = {
     keyword: "nightlife",
     location: homeLoc,
     radius: 1000
   }
-  placeService.radarSearch(placeRequest, function(response, status) {
+  placeService.radarSearch(nightlifeRequest, function(response, status) {
     components.push({
       type: "nearby",
       value: response.length,
       weight: 1
     });
-    getDirections();
+    var groceryRequest = {
+      keyword: "grocery store",
+      location: homeLoc,
+      rankBy: google.maps.places.RankBy.DISTANCE
+    }
+    placeService.nearbySearch(groceryRequest, function(response, status) {
+      components.push({
+        type: "distance",
+        value: calcDistance(homeLoc, response[0].geometry.location),
+        weight: 1
+      });
+      getDirections();
+    });
   });
 }
 
