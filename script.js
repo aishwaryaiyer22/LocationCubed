@@ -1,23 +1,28 @@
-var key = "AIzaSyAzKcjLpeaBQ3G-Fb0r8X318XVDSI9kbhQ"
+var mapOptions = {
+  zoom: 4,
+  center: {lat: 40.0, lng: -95.0}
+}
+
+var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+var dirService = new google.maps.DirectionsService();
+var dirDisplay = new google.maps.DirectionsRenderer();
+dirDisplay.setMap(map);
 
 $("#user-info-form").submit(function(event) {
   event.preventDefault();
-  var mode = $('input[name=mode]:checked').val();;
+  var travelMode = $('input[name=mode]:checked').val();;
   var origin = $("#homeAddress").val();
   var destination = $("#workAddress").val();
 
-  var request = $.get($(this).attr("action"), {
-    key: key,
-    mode: mode,
+  var request = {
     origin: origin,
-    destination: destination
-  });
-
-  request.done(function(data) {
-    alert(data["routes"][0]["legs"][0]["duration"]["text"]);
-  });
-
-  request.fail(function(data) {
-    alert("Request failed");
+    destination: destination,
+    travelMode: travelMode,
+  }
+  dirService.route(request, function(response, status) {
+    if (status == 'OK') {
+      dirDisplay.setDirections(response);
+      alert(response.routes[0].legs[0].duration.text);
+    }
   });
 });
