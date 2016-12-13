@@ -33,20 +33,20 @@ function calcDistance(p1, p2) {
 }
 
 function scoreTime(seconds) {
-  midpoint=60*60;
-  k=0.001;
-  return 1/(1 + Math.exp(-k*(midpiont-seconds));
+  var midpoint = 60*60;
+  var k = 0.001;
+  return 1/(1 + Math.exp(-k*(midpoint-seconds)));
 }
 
 function scoreDistance(meters) {
-  midpoint=500;
-  k=0.01;
-  return 1/(1 + Math.exp(-k*(midpoint-meters));
+  var midpoint = 500;
+  var k = 0.01;
+  return 1/(1 + Math.exp(-k*(midpoint-meters)));
 }
 
 function scoreNearby(quantity) {
-  midpoint=5;
-  k=0.5;
+  var midpoint = 5;
+  var k = 0.5;
   return 1 - 1/(1 + Math.exp(-k*(midpoint-quantity)));
 }
 
@@ -55,7 +55,6 @@ function locationScore(list) {
   var totWeight = 0;
   for(var i = 0; i < list.length; i++){
     var obj = list[i];
-    console.log(obj);
     var normVal;
     if (obj.type == "time") {
       normVal = scoreTime(obj.value);
@@ -64,7 +63,7 @@ function locationScore(list) {
     } else if (obj.type == "nearby") {
       normVal = scoreNearby(obj.value);
     }
-
+    console.log(normVal);
     totSum += normVal*obj.weight;
     totWeight += obj.weight;
   }
@@ -76,7 +75,6 @@ function getDirections() {
   if(homeMark) {
     homeMark.setMap(null);
   }
-  if(work != "") {
     var dirRequest = {
       origin: homeLoc,
       destination: work,
@@ -90,16 +88,15 @@ function getDirections() {
           value: response.routes[0].legs[0].duration.value,
           weight: 1
         });
+      } else {
+        dirDisplay.setDirections({routes: []});
+        homeMark = new google.maps.Marker({
+          position: homeLoc,
+          map: map
+        });
       }
+      console.log("Score: " + locationScore(components));
     });
-  } else {
-    dirDisplay.setDirections({routes: []});
-    homeMark = new google.maps.Marker({
-      position: homeLoc,
-      map: map
-    });
-  }
-  alert(locationScore(components));
 }
 
 function locationHandler(response, status) {
@@ -139,6 +136,8 @@ $("#user-info-form").submit(function(event) {
   travelMode = $('input[name=mode]:checked').val();;
   home = $("#homeAddress").val();
   work = $("#workAddress").val();
+
+  components = [];
 
   geocoder.geocode({address: home}, locationHandler);
 });
