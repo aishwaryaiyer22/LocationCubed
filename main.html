@@ -1,29 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>LocationCubed</title>
-    <!-- <link rel="stylesheet" href="bootstrap.css" media="screen"> -->
+
+	<!-- <link rel="stylesheet" href="bootstrap.css" media="screen"> -->
     <!-- Bootstrap Core CSS -->
     <link href="main_vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom Fonts -->
     <link href="main_vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
     <!-- Plugin CSS -->
     <link href="main_vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
     <!-- Theme CSS -->
     <link href="creative_main.min.css" rel="stylesheet">
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
-<body id="page-top">
-    <nav id="mainNav" class="navbar-default navbar-fixed-top">
-    <link href="styles.css" rel="stylesheet">1
+
+    <link href="styles.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+ </head>
+
+ <body id="page-top" onload="loadPrevious()">
+
+	<nav id="mainNav" class="navbar-default navbar-fixed-top">
         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand page-scroll" href="home.html">LocationCubed</a>
+            </div>
+
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
@@ -37,123 +52,175 @@
         <!-- /.container-fluid -->
     </nav>
     <header>
-      <div class="header-content">    
-        <h1 id="homeHeading">LocationCubed</h1>
-      </div>
-      <div class = "header-content header-content-inner">
-        <br><br>
-        <p style = "font-weight:400;padding: 0 10px"> LocationCubed is an app that scores residential addresses based on the quality of the neighborhood. Simply enter the address into the search bar below! For a more personalized search, fill out the 'About You' section
-      </div>  
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1 id="homeHeading">Answer the questions below to get started.</h1>
+            </div>
+        </div>
     </header>
-    <br>
-    <div class="container">
-        <div class="bs-docs-section">
-            <form class="form-horizontal" id = "user-info-form" >
+    <div class = "container" style = "margin-top:5em">
+      <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="bs-component">
+              <form class="form-horizontal" id="user-info-form">
                 <fieldset>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <h2 style = "margin-top:0" >Location</h2>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div>
-                                    <input type="text" class="form-control" id="inputAddress" placeholder="eg. 420 Riverside Drive, New York, NY" required>
-                                    <span class="glyphicon glyphicon-search form-control-feedback" aria-hidden="true"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 form-group">
-                            <!-- <span class="form-group"> -->
-                            <button type="submit" class="btn btn-primary">Score</button>
-                            <!-- </spam> -->
-                        </div>
+                  <h2 style = "margin-top:1px">Location</h2>
+                  <hr>
+                  <div class="form-group">
+                    <label for="address" class="control-label">Address</label>
+                    <div >
+                      <input type="text" class="form-control" id="homeAddress" placeholder=" eg. 420 Riverside Drive, New York, NY">
                     </div>
-                    <br><br>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="bs-component">
-                                <h2 style="margin-top:1px">About You</h2>
-                                <hr>
-                                <div class="form-group">
-                                    <label for="hood_type" class="control-label">How do you like your neighbourhood?</label>
-                                    <div class="row">
-                                        <div class="col-lg-2">
-                                            Quiet
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <input type="range" style="width:100px;" id="hood_type" min="0" max="100" curr="50" onchange="javascript:showValue(this.value);">
-                                        </div>
-                                        <div class="col-lg-2">
-                                            Lively
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address" class="control-label">Work Address</label>
-                                    <div>
-                                        <input type="text" class="form-control" id="workAddress" placeholder="(Optional) Enter your work/desired destination address">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">How will you travel within the city?</label>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="transport" id="transport1" checked="checked"> Car
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="transport" id="transport2"> Public Transport
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label">Will you be travelling with children?</label>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="optionsRadios" id="child_yes"> Yes
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="optionsRadios" id="child_no" checked=""> No
-                                        </label>
-                                    </div>
-                                </div>
-                                <!-- <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                  <button type="reset" class="btn btn-default">Cancel</button>
-                  <button type="submit" class="btn btn-primary">Score</button>
-              </div>
-          </div> -->
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-lg-offset-1">
-                            <div class="bs-component">
-                                <h2 style="margin-top:1px">Results</h2>
-                                <hr>
-                                <div id="score">
-                                    <h4> Your Results will be displayed here</h4>
-                                </div>
+                  </div>
+                  <h2 style = "margin-top:1px">About You</h2>
+                  <hr>
 
-                                <div id="score_details" style = "display:none;">
-                                  <h2 style="margin-top:1px" >Breakdown:</h2>
-                                </div>
-                                <div id = "work-header"></div>
-                                <div id="map" style = "width: 100%; height: 250px;"></div>
-                                <br>
-                                <div id = "location-header"></div>
-                                <div id="map2" style = "width: 100%; height: 250px;"></div>
-                            </div>
-                        </div>
+                  <div class="form-group">
+                    <label for="hood_type" class="control-label">What kind of neigbourhood would you prefer?</label>
+                    <div class = "row">
+                      <div class="col-lg-2">
+                        Quiet
+                      </div>
+                      <div class="col-lg-4">
+                        <input type="range" class="form-control" id="hood_type" min="0" max="100">
+                      </div>
+                      <div class="col-lg-2">
+                        Loud
+                      </div>
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="address" class="control-label">Work Address</label>
+                    <div >
+                      <input type="text" class="form-control" id="workAddress" placeholder="(Optional) Enter your work/desired destination address">
+                    </div>
+                  </div>
+                  <!-- <div class="form-group">
+                    <label for="textArea" class="col-lg-2 control-label">Textarea</label>
+                    <div class="col-lg-10">
+                      <textarea class="form-control" rows="3" id="textArea"></textarea>
+                      <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+                    </div>
+                  </div> -->
+                  <div class="form-group">
+                    <label class="control-label">Preferred mode of transport</label>
+                    <div class="">
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="mode" value="DRIVING" checked="">
+                          Car
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="mode" value="TRANSIT">
+                          Public Transit
+                        </label>
+                      </div>
+                       <div class="radio">
+                        <label>
+                          <input type="radio" name="mode" value="BICYCLING">
+                          Bicycle
+                        </label>
+                      </div> 
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="mode" value="WALKING">
+                          Walking
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label">Will you be travelling with children?</label>
+                    <div class="">
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="kids" value="yes" checked="">
+                          Yes
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="kids" value="no">
+                          No
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="reset" class="btn btn-default">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Score</button>
+                    </div>
+                  </div>
                 </fieldset>
-            </form>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4 col-lg-offset-1">
+            <h3> Your Results will be displayed here</h3>
+            <div id="map"></div>
+
+              <!-- <form class="bs-component">
+                <div class="form-group">
+                  <label class="control-label" for="focusedInput">Focused input</label>
+                  <input class="form-control" id="focusedInput" type="text" value="This is focused...">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="disabledInput">Disabled input</label>
+                  <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled="">
+                </div>
+
+                <div class="form-group has-warning">
+                  <label class="control-label" for="inputWarning">Input warning</label>
+                  <input type="text" class="form-control" id="inputWarning">
+                </div>
+
+                <div class="form-group has-error">
+                  <label class="control-label" for="inputError">Input error</label>
+                  <input type="text" class="form-control" id="inputError">
+                </div>
+
+                <div class="form-group has-success">
+                  <label class="control-label" for="inputSuccess">Input success</label>
+                  <input type="text" class="form-control" id="inputSuccess">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="inputLarge">Large input</label>
+                  <input class="form-control input-lg" type="text" id="inputLarge">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="inputDefault">Default input</label>
+                  <input type="text" class="form-control" id="inputDefault">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="inputSmall">Small input</label>
+                  <input class="form-control input-sm" type="text" id="inputSmall">
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label">Input addons</label>
+                  <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Button</button>
+                    </span>
+                  </div>
+                </div>
+              </form> -->
+
+          </div>
         </div>
     </div>
-    <!-- Javascript  -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzKcjLpeaBQ3G-Fb0r8X318XVDSI9kbhQ&libraries=places"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzKcjLpeaBQ3G-Fb0r8X318XVDSI9kbhQ&libraries=places,geometry"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
 </html>

@@ -1,11 +1,18 @@
-var score_breakdown;
+var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'));
 
-//can make api calls using these values
-var placeService;
+var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'));
+
+var mapOptions = {
+  zoom: 4,
+  center: {lat: 40.0, lng: -95.0}
+}
+
+var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+var placeService = new google.maps.places.PlacesService(map);
 var geocoder = new google.maps.Geocoder;
 var dirService = new google.maps.DirectionsService();
 var dirDisplay = new google.maps.DirectionsRenderer();
-var map, map2;
+dirDisplay.setMap(map);
 
 var home;
 var work;
@@ -17,44 +24,6 @@ var homeLoc;
 var homeMark;
 
 var components = [];
-var score;
-
-//Show range value as it is changed
-function showValue(newValue)
-{
-	document.getElementById("hood_type").innerHTML=newValue;
-}
-
-function displayResults()
-{
-	document.getElementById("score").innerHTML= "<h3>Overall Score: "+ score+"</h3>";
-	var temp_text = "<br><p><u><b>Breakdown:</p>";
-	var deets = document.getElementById("score_details");
-	var work_header = document.getElementById("work-header");
-	var location_header = document.getElementById("location-header");
-	console.log(score_breakdown);
-	deets.innerHTML= temp_text;
-	deets.style.display = "";
-
-	mapOptions = {
-			zoom: 4,
-			center: {lat: 40.0, lng: -95.0}
-	};
-	work_header.innerHTML = "<br><u><p><b>Route to Work:</p><br>";
-	location_header.innerHTML = "<br><u><p><b>Neighborhood:</p><br>"
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    map2 = new google.maps.Map(document.getElementById('map2'), mapOptions);
-	placeService = new google.maps.places.PlacesService(map);
-	dirDisplay.setMap(map);
-	dirDisplay.setMap(map2);
-}
-
-$(window).on('resize', function() {
-    $windowWidth = $(this).width();
- 	console.log("resize detected")
-    console.log($windowWidth);
-});
-
 
 function calcDistance(p1, p2) {
   return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2)).toFixed(2);
@@ -83,8 +52,6 @@ function locationScore(list) {
   var totWeight = 0;
   for(var i = 0; i < list.length; i++){
     var obj = list[i];
-    score_breakdown = obj;
-    console.log(list[i]);
     var normVal;
     if (obj.type == "time") {
       if(obj.value > 3*60*60) {
@@ -100,7 +67,7 @@ function locationScore(list) {
     totSum += normVal*obj.weight;
     totWeight += obj.weight;
   }
-  score =  10 * totSum/totWeight;
+
   return 10 * totSum/totWeight;
 }
 
@@ -127,12 +94,6 @@ function getDirections() {
           position: homeLoc,
           map: map
         });
-        var mapOptions = {
-			zoom: 4,
-			center: {lat: 40.0, lng: -95.0}
-		};
-        var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-		dirDisplay.setMap(map);
       }
       console.log("Score: " + locationScore(components));
     });
@@ -178,20 +139,20 @@ function loadPrevious() {
 }
 
 $("#user-info-form").submit(function(event) {
-	localStorage.home 	= document.getElementById("inputAddress").value
-	localStorage.slider	= document.getElementById("hood_type").value
-	localStorage.work	= document.getElementById("workAddress").value
-	localStorage.mode	= document.getElementById("transport1").checked? "DRIVING":"TRANSIT"
-	localStorage.kids	= document.getElementById("child_yes").checked? true:false
-	displayResults()
-	event.preventDefault();
-	slider	= document.getElementById("hood_type").value;
-	mode 	= document.getElementById("transport1").checked? "DRIVING":"TRANSIT";
-	home 	= document.getElementById("inputAddress").value;
-	work 	= $("#workAddress").val();
-	kids 	= document.getElementById("child_yes").checked? true:false
+  event.preventDefault();
+  slider = $('#hood_type').val();
+  mode = $('input[name=mode]:checked').val();;
+  kids = $('input[name=kids]:checked').val();;
+  home = $("#homeAddress").val();
+  work = $("#workAddress").val();
+
+  localStorage.setItem("home", home);
+  localStorage.setItem("work", work);
+  localStorage.setItem("mode", mode);
+  localStorage.setItem("kids", kids);
+  localStorage.setItem("slider", slider);
 
   components = [];
+
   geocoder.geocode({address: home}, locationHandler);
 });
-
