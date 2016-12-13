@@ -33,20 +33,20 @@ function calcDistance(p1, p2) {
 }
 
 function scoreTime(seconds) {
-  midpoint=60*60
-  k=0.001
+  midpoint=60*60;
+  k=0.001;
   return 1/(1 + Math.exp(-k*(midpiont-seconds));
 }
 
 function scoreDistance(meters) {
-  midpoint=500
-  k=0.01
+  midpoint=500;
+  k=0.01;
   return 1/(1 + Math.exp(-k*(midpoint-meters));
 }
 
 function scoreNearby(quantity) {
-  midpoint=5
-  k=0.5
+  midpoint=5;
+  k=0.5;
   return 1 - 1/(1 + Math.exp(-k*(midpoint-quantity)));
 }
 
