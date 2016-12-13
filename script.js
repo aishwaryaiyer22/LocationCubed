@@ -1,10 +1,10 @@
-homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'), {
-  types: ['address'],
-});
-workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'), {
+var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'), {
   types: ['address'],
 });
 
+var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'), {
+  types: ['address'],
+});
 
 var mapOptions = {
   zoom: 4,
@@ -24,9 +24,38 @@ $("#user-info-form").submit(function(event) {
   var travelMode = $('input[name=mode]:checked').val();;
   var home = $("#homeAddress").val();
   var work = $("#workAddress").val();
+  
+  var homeLoc;
+  var homeMark;
 
-  geocoder.geocode({address: home}, function(response, status) {
-    var homeLoc = response[0].geometry.location;
+  var getDirections = function() {
+    if(homeMark) {
+      homeMark.setMap(null);
+    }
+    if(work != "") {
+      var dirRequest = {
+        origin: homeLoc,
+        destination: work,
+        travelMode: travelMode
+      }
+      dirService.route(dirRequest, function(response, status) {
+        if(status == 'OK') {
+          dirDisplay.setDirections(response);
+          alert(response.routes[0].legs[0].duration.text);
+        }
+      });
+    } else {
+      homeMark = new google.maps.Marker({
+        position: homeLoc,
+        map: map
+      });
+      map.setCenter(homeLoc);
+      map.setZoom(12);
+    }
+  }
+
+  var locationHandler = function(response, status) {
+    homeLoc = response[0].geometry.location;
     var placeRequest = {
       keyword: "nightlife",
       location: homeLoc,
@@ -35,19 +64,49 @@ $("#user-info-form").submit(function(event) {
     placeService.radarSearch(placeRequest, function(response, status) {
       alert(response.length);
     });
-  });
-
-  if(work != "") {
-    var dirRequest = {
-      origin: home,
-      destination: work,
-      travelMode: travelMode
-    }
-    dirService.route(dirRequest, function(response, status) {
-      if (status == 'OK') {
-        dirDisplay.setDirections(response);
-        alert(response.routes[0].legs[0].duration.text);
-      }
-    });
+    getDirections();
   }
+
+  geocoder.geocode({address: home}, locationHandler);
+
 });
+
+var timeToWork = {
+  time: 4,
+  weight: 1
+}
+
+var distToObj = {
+  dist: 4,
+  weight: 1
+}
+
+var objWithinRadius = {
+  total: 0,
+  weight: 1
+}
+
+function locationScore(list) {
+
+  totSum = 0;
+  totWeight = 0;
+  for(obj in list){
+
+    if(obj.type() == timeToWork) {
+      //logistic function
+      normVal = 1 - 1/(1+exp(-1(timeToWork.time-(60*60)))); //60*60 is 50% mark
+    } else if (obf.type() == distToObj) {
+      //logistic function
+      normVal = 1 - 1/(1+exp(-1(distToObj.dist-(100)))); //100 is midpoint distance
+    } else {// of type objWithinRadius
+      //logistic function
+      normVal = 1 - 1/(1+exp(-1(objWithinRadius.dist-(3)))); //3 is midpoint number wanted
+    }
+
+    totSum += normVal;
+    totWeight += obj.weight;
+  }
+
+  locationScore = totSum/totWeight * 10;
+
+}
