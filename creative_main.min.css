@@ -238,22 +238,14 @@ header .header-content .header-content-inner p {
         transform: translateY(-50%);
         padding: 0 10px 20px
     }
-     header .my_header {
-        position: absolute;
+    header .header-content h1{
+        vertical-align: top;
         text-align: left;
         top: 50%;
+        font-size: 7px
         -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
         transform: translateY(-50%);
-        padding: 0 10px 20px
-    }
-     header .my_header .inner_text{
-        /*position: absolute;
-        text-align: left;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);*/
         padding: 0 10px 20px
     }
     header .header-content .header-content-inner {
@@ -261,9 +253,7 @@ header .header-content .header-content-inner p {
         margin-left: auto;
         margin-right: auto
     }
-    header .header-content .header-content-inner h1 {
-        font-size: 50px
-    }
+  
     header .header-content .header-content-inner p {
         font-size: 18px;
         max-width: 80%;

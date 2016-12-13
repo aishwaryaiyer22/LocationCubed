@@ -23,11 +23,8 @@
 
 <body id="page-top">
     <nav id="mainNav" class="navbar-default navbar-fixed-top">
+    <link href="styles.css" rel="stylesheet">1
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="navbar-brand page-scroll" href="home.html">LocationCubed</a>
-            </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
@@ -48,7 +45,7 @@
     <br>
     <div class="container">
         <div class="bs-docs-section">
-            <form class="form-horizontal" action="javascript:submit();">
+            <form class="form-horizontal" id = "user-info-form" >
                 <fieldset>
                     <div class="row">
                         <div class="col-lg-2">
@@ -138,7 +135,8 @@
                                 <div id="score_details" style = "display:none;">
                                   <h2 style="margin-top:1px" >Breakdown:</h2>
                                 </div>
-                                <div id="work_map"></div>
+                                <div id="map"></div>
+                                <div id="school_map"></div>
                             </div>
                         </div>
                     </div>
@@ -147,7 +145,7 @@
         </div>
     </div>
     <!-- Javascript  -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzKcjLpeaBQ3G-Fb0r8X318XVDSI9kbhQ&libraries=places"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
-
 </html>
