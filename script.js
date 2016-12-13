@@ -33,15 +33,21 @@ function calcDistance(p1, p2) {
 }
 
 function scoreTime(seconds) {
-  return 1 - 1/(1 + Math.exp((60 * 60) - seconds)); //60*60 is 50% mark
+  midpoint=60*60
+  k=0.001
+  return 1/(1 + Math.exp(-k*(midpiont-seconds));
 }
 
 function scoreDistance(meters) {
-  return 1 - 1/(1 + Math.exp(100 - meters)); //100 is midpoint distance
+  midpoint=500
+  k=0.01
+  return 1/(1 + Math.exp(-k*(midpoint-meters));
 }
 
 function scoreNearby(quantity) {
-  return 1 - 1/(1 + Math.exp(3 - quantity)); //3 is midpoint quantity wanted
+  midpoint=5
+  k=0.5
+  return 1 - 1/(1 + Math.exp(-k*(midpoint-quantity)));
 }
 
 function locationScore(list) {
@@ -59,7 +65,7 @@ function locationScore(list) {
       normVal = scoreNearby(obj.value);
     }
 
-    totSum += normVal;
+    totSum += normVal*obj.weight;
     totWeight += obj.weight;
   }
 
