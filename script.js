@@ -1,10 +1,6 @@
-var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'), {
-  types: ['address'],
-});
+var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'));
 
-var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'), {
-  types: ['address'],
-});
+var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'));
 
 var mapOptions = {
   zoom: 4,
@@ -57,6 +53,9 @@ function locationScore(list) {
     var obj = list[i];
     var normVal;
     if (obj.type == "time") {
+      if(obj.value > 3*60*60) {
+        return 0;
+      }
       normVal = scoreTime(obj.value);
     } else if (obj.type == "distance") {
       normVal = scoreDistance(obj.value);
