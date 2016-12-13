@@ -63,7 +63,6 @@ function locationScore(list) {
     } else if (obj.type == "nearby") {
       normVal = scoreNearby(obj.value);
     }
-    console.log(normVal);
     totSum += normVal*obj.weight;
     totWeight += obj.weight;
   }
@@ -95,7 +94,7 @@ function getDirections() {
           map: map
         });
       }
-      console.log("Score: " + locationScore(components));
+      $("#score").prepend(("<h3>Overall score: " + locationScore(components) + "</h3>"));
     });
 }
 
