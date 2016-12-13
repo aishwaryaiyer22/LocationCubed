@@ -26,6 +26,42 @@ var work;
 var homeLoc;
 var homeMark;
 
+var components = [];
+
+function scoreTime(seconds) {
+  return 1 - 1/(1 + Math.exp((60 * 60) - seconds)); //60*60 is 50% mark
+}
+
+function scoreDistance(meters) {
+  return 1 - 1/(1 + Math.exp(100 - meters)); //100 is midpoint distance
+}
+
+function scoreNearby(quantity) {
+  return 1 - 1/(1 + Math.exp(3 - quantity)); //3 is midpoint quantity wanted
+}
+
+function locationScore(list) {
+  var totSum = 0;
+  var totWeight = 0;
+  for(var i = 0; i < list.length; i++){
+    var obj = list[i];
+    console.log(obj);
+    var normVal;
+    if (obj.type == "time") {
+      normVal = scoreTime(obj.value);
+    } else if (obj.type == "distance") {
+      normVal = scoreDistance(obj.value);
+    } else if (obj.type == "nearby") {
+      normVal = scoreNearby(obj.value);
+    }
+
+    totSum += normVal;
+    totWeight += obj.weight;
+  }
+
+  return 10 * totSum/totWeight;
+}
+
 function getDirections() {
   if(homeMark) {
     homeMark.setMap(null);
@@ -39,7 +75,11 @@ function getDirections() {
     dirService.route(dirRequest, function(response, status) {
       if(status == 'OK') {
         dirDisplay.setDirections(response);
-        alert(response.routes[0].legs[0].duration.text);
+        components.push({
+          type: "time",
+          value: response.routes[0].legs[0].duration.value,
+          weight: 1
+        });
       }
     });
   } else {
@@ -49,6 +89,7 @@ function getDirections() {
       map: map
     });
   }
+  alert(locationScore(components));
 }
 
 function locationHandler(response, status) {
@@ -61,9 +102,13 @@ function locationHandler(response, status) {
     radius: 1000
   }
   placeService.radarSearch(placeRequest, function(response, status) {
-    alert(response.length);
+    components.push({
+      type: "nearby",
+      value: response.length,
+      weight: 1
+    });
+    getDirections();
   });
-  getDirections();
 }
 
 $("#user-info-form").submit(function(event) {
@@ -75,43 +120,3 @@ $("#user-info-form").submit(function(event) {
 
   geocoder.geocode({address: home}, locationHandler);
 });
-
-var timeToWork = {
-  time: 4,
-  weight: 1
-}
-
-var distToObj = {
-  dist: 4,
-  weight: 1
-}
-
-var objWithinRadius = {
-  total: 0,
-  weight: 1
-}
-
-function locationScore(list) {
-
-  totSum = 0;
-  totWeight = 0;
-  for(obj in list){
-
-    if(obj.type() == timeToWork) {
-      //logistic function
-      normVal = 1 - 1/(1+exp(-1(timeToWork.time-(60*60)))); //60*60 is 50% mark
-    } else if (obf.type() == distToObj) {
-      //logistic function
-      normVal = 1 - 1/(1+exp(-1(distToObj.dist-(100)))); //100 is midpoint distance
-    } else {// of type objWithinRadius
-      //logistic function
-      normVal = 1 - 1/(1+exp(-1(objWithinRadius.dist-(3)))); //3 is midpoint number wanted
-    }
-
-    totSum += normVal;
-    totWeight += obj.weight;
-  }
-
-  locationScore = totSum/totWeight * 10;
-
-}
