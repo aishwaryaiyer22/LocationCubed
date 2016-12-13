@@ -42,9 +42,12 @@ function scoreDistance(meters) {
 }
 
 function scoreNearby(quantity) {
-  var midpoint = 5;
   var k = 0.5;
-  return 1 - 1/(1 + Math.exp(-k*(midpoint-quantity)));
+  var lively = 1 - 1/(1 + Math.exp(-k*(slider-quantity)));
+  var quiet = 1 - lively;
+  lively *= slider/100;
+  quiet *= 1 - slider/100;
+  return lively + quiet
 }
 
 function locationScore(list) {
@@ -103,7 +106,7 @@ function locationHandler(response, status) {
   map.setCenter(homeLoc);
   map.setZoom(12);
   var nightlifeRequest = {
-    keyword: "nightlife",
+    keyword: "restaurants and nightlife",
     location: homeLoc,
     radius: 1000
   }
