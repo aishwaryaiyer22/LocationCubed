@@ -14,10 +14,11 @@ var dirService = new google.maps.DirectionsService();
 var dirDisplay = new google.maps.DirectionsRenderer();
 dirDisplay.setMap(map);
 
-var slider;
-var travelMode;
 var home;
 var work;
+var mode;
+var slider;
+var kids;
 
 var homeLoc;
 var homeMark;
@@ -29,7 +30,7 @@ function calcDistance(p1, p2) {
 }
 
 function scoreTime(seconds) {
-  var midpoint = 60*60;
+  var midpoint = 35*60;
   var k = 0.001;
   return 1/(1 + Math.exp(-k*(midpoint-seconds)));
 }
@@ -77,7 +78,7 @@ function getDirections() {
     var dirRequest = {
       origin: homeLoc,
       destination: work,
-      travelMode: travelMode
+      travelMode: mode
     }
     dirService.route(dirRequest, function(response, status) {
       if(status == 'OK') {
@@ -85,7 +86,7 @@ function getDirections() {
         components.push({
           type: "time",
           value: response.routes[0].legs[0].duration.value,
-          weight: 1
+          weight: 2
         });
       } else {
         dirDisplay.setDirections({routes: []});
@@ -127,14 +128,29 @@ function locationHandler(response, status) {
       getDirections();
     });
   });
+} 
+
+function loadPrevious() {
+  $("#homeAddress").val(localStorage.getItem("home"));
+  $("#workAddress").val(localStorage.getItem("work"));
+  $('#hood_type').val(localStorage.getItem("slider"));
+  $('input[name=mode][value=' + localStorage.getItem("mode") + ']').prop("checked", true);
+  $('input[name=kids][value=' + localStorage.getItem("kids") + ']').prop("checked", true);
 }
 
 $("#user-info-form").submit(function(event) {
   event.preventDefault();
   slider = $('#hood_type').val();
-  travelMode = $('input[name=mode]:checked').val();;
+  mode = $('input[name=mode]:checked').val();;
+  kids = $('input[name=kids]:checked').val();;
   home = $("#homeAddress").val();
   work = $("#workAddress").val();
+
+  localStorage.setItem("home", home);
+  localStorage.setItem("work", work);
+  localStorage.setItem("mode", mode);
+  localStorage.setItem("kids", kids);
+  localStorage.setItem("slider", slider);
 
   components = [];
 
