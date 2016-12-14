@@ -32,13 +32,17 @@ function calcDistance(p1, p2) {
 function scoreTime(seconds) {
   var midpoint = 35*60;
   var k = 0.001;
-  return 1/(1 + Math.exp(-k*(midpoint-seconds)));
+  var score = 1/(1 + Math.exp(-k*(midpoint-seconds)));
+  $("#breakdown").append("<p>Commute time: " + 10 * score.toFixed(2) + "/10");
+  return score;
 }
 
 function scoreDistance(meters) {
   var midpoint = 500;
   var k = 0.01;
-  return 1/(1 + Math.exp(-k*(midpoint-meters)));
+  var score = 1/(1 + Math.exp(-k*(midpoint-meters)));
+  $("#breakdown").append("<p>Proximity of grocery stores: " + 10 * score.toFixed(2) + "/10");
+  return score;
 }
 
 function scoreNearby(quantity) {
@@ -47,10 +51,14 @@ function scoreNearby(quantity) {
   var quiet = 1 - lively;
   lively *= slider/100;
   quiet *= 1 - slider/100;
-  return lively + quiet
+  var score = lively + quiet;
+  $("#breakdown").append("<p>Neighborhood mood: " + 10 * score.toFixed(2) + "/10");
+  return score;
 }
 
 function locationScore(list) {
+  $("#score").empty();
+  $("#breakdown").empty();
   var totSum = 0;
   var totWeight = 0;
   for(var i = 0; i < list.length; i++){
@@ -97,7 +105,7 @@ function getDirections() {
           map: map
         });
       }
-      $("#score").prepend(("<h3>Overall score: " + locationScore(components) + "</h3>"));
+      $("#score").prepend(("<h4><strong>Overall score:</strong> " + locationScore(components) + "</h3>"));
     });
 }
 
