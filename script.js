@@ -18,7 +18,7 @@ var home;
 var work;
 var mode;
 var slider;
-var kids;
+
 
 var homeLoc;
 var homeMark;
@@ -155,21 +155,18 @@ function loadPrevious() {
   $("#workAddress").val(localStorage.getItem("work"));
   $('#hood_type').val(localStorage.getItem("slider"));
   $('input[name=mode][value=' + localStorage.getItem("mode") + ']').prop("checked", true);
-  $('input[name=kids][value=' + localStorage.getItem("kids") + ']').prop("checked", true);
 }
 
 $("#user-info-form").submit(function(event) {
   event.preventDefault();
   slider = $('#hood_type').val();
   mode = $('input[name=mode]:checked').val();;
-  kids = $('input[name=kids]:checked').val();;
   home = $("#homeAddress").val();
   work = $("#workAddress").val();
 
   localStorage.setItem("home", home);
   localStorage.setItem("work", work);
   localStorage.setItem("mode", mode);
-  localStorage.setItem("kids", kids);
   localStorage.setItem("slider", slider);
 
   components = [];
