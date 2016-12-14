@@ -1,6 +1,6 @@
-var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'));
+var homeAutocomplete = new google.maps.places.Autocomplete(document.getElementById('homeAddress'), {types: ["address"]});
 
-var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'));
+var workAutocomplete = new google.maps.places.Autocomplete(document.getElementById('workAddress'), {types: ["address"]});
 
 var mapOptions = {
   zoom: 4,
@@ -33,7 +33,8 @@ function scoreTime(seconds) {
   var midpoint = 35*60;
   var k = 0.001;
   var score = 1/(1 + Math.exp(-k*(midpoint-seconds)));
-  $("#breakdown").append("<p>Commute time: " + 10 * score.toFixed(2) + "/10");
+  var summary = "<i>This location has a " + (score > .7 ? "short" : (score > .3 ? "medium length" : "long")) + " commute to work.</i>";
+  $("#breakdown").append("<h4>Commute time: " + (10 * score).toFixed(2) + "/10</h4><p>" + summary);
   return score;
 }
 
@@ -41,7 +42,8 @@ function scoreDistance(meters) {
   var midpoint = 500;
   var k = 0.01;
   var score = 1/(1 + Math.exp(-k*(midpoint-meters)));
-  $("#breakdown").append("<p>Proximity of grocery stores: " + 10 * score.toFixed(2) + "/10");
+  var summary = "<i>This location is " + (score > .7 ? "close to" : (score > .3 ? "moderately close to" : "far away from")) + " a grocery store.</i>";
+  $("#breakdown").append("<h4>Proximity to grocery stores: " + (10 * score).toFixed(2) + "/10</h4><p>" + summary);
   return score;
 }
 
@@ -52,13 +54,15 @@ function scoreNearby(quantity) {
   lively *= slider/100;
   quiet *= 1 - slider/100;
   var score = lively + quiet;
-  $("#breakdown").append("<p>Neighborhood mood: " + 10 * score.toFixed(2) + "/10");
+  var summary = "<i>This location " + (score > .7 ? "closely matches" : (score > .3 ? "somewhat matches" : "does not match")) + " your neighborhood liveliness preference.</i>";
+  $("#breakdown").append("<h4>Neighborhood mood: " + (10 * score).toFixed(2) + "/10</h4><p>" + summary);
   return score;
 }
 
 function locationScore(list) {
   $("#score").empty();
   $("#breakdown").empty();
+  $("#breakdown").html($("<h3>Breakdown</h3>"));
   var totSum = 0;
   var totWeight = 0;
   for(var i = 0; i < list.length; i++){
@@ -78,7 +82,7 @@ function locationScore(list) {
     totWeight += obj.weight;
   }
 
-  return 10 * totSum/totWeight;
+  return (10 * totSum/totWeight).toFixed(2);
 }
 
 function getDirections() {
@@ -99,17 +103,23 @@ function getDirections() {
           weight: 2
         });
       } else {
+        if(work != "") {
+          alert("Work address could not be found. Please enter a valid work address. The current score will not reflect commute time.");
+        }
         dirDisplay.setDirections({routes: []});
         homeMark = new google.maps.Marker({
           position: homeLoc,
           map: map
         });
       }
-      $("#score").prepend(("<h4><strong>Overall score:</strong> " + locationScore(components) + "</h3>"));
+      $("#score").prepend(("<h4><strong>Overall score:</strong> " + locationScore(components) + "/10</h3>"));
     });
 }
 
 function locationHandler(response, status) {
+  if(!response[0]) {
+    alert("Please enter a valid address. Try using the autocomplete suggestions if you are having trouble.");
+  }
   homeLoc = response[0].geometry.location;
   map.setCenter(homeLoc);
   map.setZoom(12);
